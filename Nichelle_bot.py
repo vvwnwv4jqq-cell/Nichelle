@@ -13,12 +13,18 @@ TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 # Inizializza il client Gemini AI
+# Inizializza il client Gemini AI (CORREZIONE PER L'ERRORE 'CONFIGURE')
 try:
-    genai.configure(api_key=GEMINI_API_KEY)
-    gemini_client = genai.Client()
+    if not GEMINI_API_KEY:
+        raise ValueError("GEMINI_API_KEY non fornita nelle variabili d'ambiente.")
+
+    # Utilizziamo genai.Client() che è il metodo corretto per inizializzare
+    gemini_client = genai.Client(api_key=GEMINI_API_KEY)
 except Exception as e:
-    # Se le chiavi non sono caricate, questo stampa un errore
-    print(f"Errore nella configurazione di Gemini: {e}") 
+    # Se le chiavi non sono caricate, questo stampa l'errore e ferma l'avvio
+    print(f"Errore nella configurazione di Gemini: {e}")
+    exit() 
+
 
 # --------------------------
 # 2. PROMPT DI SISTEMA (PERSONALITÀ DI AURORA)
